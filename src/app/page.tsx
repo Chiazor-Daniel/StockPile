@@ -1,96 +1,170 @@
 "use client";
 
 import * as React from "react";
-import { PlusCircle, Box } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { ProductDialog } from "@/components/stockpile/product-dialog";
-import { ProductTable } from "@/components/stockpile/product-table";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { DollarSign, Package, Package2 } from "lucide-react";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
+import { PieChart, Pie, Cell } from "recharts";
 import { useProducts } from "@/hooks/use-products";
-import type { Product } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Home() {
-  const {
-    products,
-    addProduct,
-    editProduct,
-    updateStock,
-    deleteProduct,
-    isLoading,
-  } = useProducts();
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [productToEdit, setProductToEdit] = React.useState<Product | null>(
-    null
+export default function DashboardPage() {
+  const { products, isLoading } = useProducts();
+
+  const totalProducts = products.length;
+  const totalStock = products.reduce(
+    (acc, product) => acc + product.quantity,
+    0
   );
-  const [recentlyUpdated, setRecentlyUpdated] = React.useState<string | null>(
-    null
+  // Assuming a placeholder price for demonstration
+  const totalValue = products.reduce(
+    (acc, product) => acc + product.quantity * (product.price || 50),
+    0
   );
 
-  const handleOpenDialog = (product?: Product) => {
-    setProductToEdit(product || null);
-    setIsDialogOpen(true);
+  const categoryDistribution = React.useMemo(() => {
+    if (!products || products.length === 0) return [];
+    const categoryCount = products.reduce((acc, product) => {
+      acc[product.category] = (acc[product.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return Object.entries(categoryCount).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }, [products]);
+
+  const chartConfig = {
+    value: {
+      label: "Products",
+    },
+    ...categoryDistribution.reduce((acc, category) => {
+      acc[category.name] = { label: category.name };
+      return acc;
+    }, {} as any),
   };
 
-  const handleSaveProduct = (productData: Product) => {
-    if (productToEdit) {
-      editProduct(productData);
-    } else {
-      const newProduct = {
-        ...productData,
-        id: new Date().toISOString(),
-      };
-      addProduct(newProduct);
-    }
-    setIsDialogOpen(false);
-    setProductToEdit(null);
-  };
+  const COLORS = [
+    "hsl(var(--chart-1))",
+    "hsl(var(--chart-2))",
+    "hsl(var(--chart-3))",
+    "hsl(var(--chart-4))",
+    "hsl(var(--chart-5))",
+  ];
 
-  const handleUpdateStock = (productId: string, change: number) => {
-    updateStock(productId, change);
-    setRecentlyUpdated(productId);
-    setTimeout(() => setRecentlyUpdated(null), 1500);
-  };
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <Skeleton className="h-[400px] col-span-4" />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <header className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <Box className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold tracking-tight text-gray-800 dark:text-white">
-            Stockpile Manager
-          </h1>
-        </div>
-        <Button onClick={() => handleOpenDialog()}>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add Product
-        </Button>
-      </header>
-      <main>
-        {isLoading ? (
-          <div className="w-full space-y-2">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </div>
-        ) : (
-          <ProductTable
-            products={products}
-            onEdit={handleOpenDialog}
-            onDelete={deleteProduct}
-            onUpdateStock={handleUpdateStock}
-            recentlyUpdated={recentlyUpdated}
-          />
-        )}
-      </main>
-
-      <ProductDialog
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        onSave={handleSaveProduct}
-        productToEdit={productToEdit}
-      />
+    <div className="flex-1 space-y-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalProducts}</div>
+            <p className="text-xs text-muted-foreground">
+              Unique products in your inventory
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Stock</CardTitle>
+            <Package2 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalStock}</div>
+            <p className="text-xs text-muted-foreground">
+              Total items across all products
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Estimated Inventory Value
+            </CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              ${totalValue.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Based on an estimated average price of $50
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="grid gap-4">
+        <Card className="col-span-1 lg:col-span-4">
+          <CardHeader>
+            <CardTitle>Category Distribution</CardTitle>
+            <CardDescription>
+              See how many products you have in each category.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <ChartContainer
+              config={chartConfig}
+              className="mx-auto aspect-square max-h-[400px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={categoryDistribution}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  {categoryDistribution.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <ChartLegend
+                  content={<ChartLegendContent nameKey="name" />}
+                  className="-translate-y-[2rem] flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                />
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

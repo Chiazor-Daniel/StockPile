@@ -15,4 +15,12 @@ export const productSchema = z.object({
     .min(0, {
       message: "Quantity must be a non-negative number.",
     }),
+  price: z
+    .number({
+      invalid_type_error: "Price must be a number.",
+    })
+    .min(0, {
+      message: "Price must be a non-negative number.",
+    })
+    .optional(),
 });

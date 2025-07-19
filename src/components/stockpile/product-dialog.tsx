@@ -54,6 +54,7 @@ export function ProductDialog({
       name: "",
       category: "",
       quantity: 0,
+      price: 0,
     },
   });
 
@@ -66,6 +67,7 @@ export function ProductDialog({
         name: "",
         category: "",
         quantity: 0,
+        price: 0,
       });
     }
   }, [productToEdit, form, isOpen]);
@@ -176,6 +178,24 @@ export function ProductDialog({
                       placeholder="0"
                       {...field}
                       onChange={(e) => field.onChange(parseInt(e.target.value, 10) || 0)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price ($)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      {...field}
+                      onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                     />
                   </FormControl>
                   <FormMessage />
