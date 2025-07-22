@@ -7,7 +7,6 @@ import {
   Trash2,
   Plus,
   Minus,
-  Loader2,
 } from "lucide-react";
 import {
   Table,
@@ -73,14 +72,14 @@ const StockManager = ({ onUpdateStock }: { onUpdateStock: (change: number) => vo
           className="w-full"
           onClick={() => onUpdateStock(amount)}
         >
-          <Plus className="mr-2 h-4 w-4" /> Stock In
+          <Plus className="mr-2 h-4 w-4" /> Add
         </Button>
         <Button
           variant="outline"
           className="w-full"
           onClick={() => onUpdateStock(-amount)}
         >
-          <Minus className="mr-2 h-4 w-4" /> Stock Out
+          <Minus className="mr-2 h-4 w-4" /> Remove
         </Button>
       </div>
     </div>
@@ -97,9 +96,9 @@ export function ProductTable({
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-        <h3 className="text-xl font-medium text-gray-900">No Products Found</h3>
+        <h3 className="text-xl font-medium text-gray-900">No Groceries Found</h3>
         <p className="mt-2 text-sm text-gray-500">
-          Get started by adding a new product.
+          Get started by adding a new grocery item.
         </p>
       </div>
     );
@@ -110,7 +109,7 @@ export function ProductTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40%]">Product Name</TableHead>
+            <TableHead className="w-[40%]">Grocery Item</TableHead>
             <TableHead>Category</TableHead>
             <TableHead className="text-right">Quantity</TableHead>
             <TableHead className="w-[100px] text-center">Actions</TableHead>
@@ -140,7 +139,7 @@ export function ProductTable({
                   <DropdownMenuContent align="end">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-start font-normal h-8 px-2">Manage Stock</Button>
+                        <Button variant="ghost" className="w-full justify-start font-normal h-8 px-2">Manage Quantity</Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-64" align="end">
                          <StockManager onUpdateStock={(change) => onUpdateStock(product.id, change)} />
@@ -165,7 +164,7 @@ export function ProductTable({
                           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                           <AlertDialogDescription>
                             This action cannot be undone. This will permanently
-                            delete the product "{product.name}".
+                            delete the item "{product.name}".
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

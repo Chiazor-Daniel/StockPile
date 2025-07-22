@@ -39,8 +39,7 @@ export default function ProductsPage() {
       const newProduct = {
         ...productData,
         id: new Date().toISOString(),
-        // Add a placeholder price for the dashboard calculation
-        price: productData.price || Math.floor(Math.random() * 100) + 10,
+        price: productData.price || 0,
       };
       addProduct(newProduct);
     }
@@ -58,11 +57,11 @@ export default function ProductsPage() {
     <div className="space-y-8">
       <header className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight text-gray-800 dark:text-white">
-          Products
+          Groceries
         </h1>
         <Button onClick={() => handleOpenDialog()}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Product
+          Add Item
         </Button>
       </header>
       <main>

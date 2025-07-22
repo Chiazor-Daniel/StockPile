@@ -114,12 +114,12 @@ export function ProductDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {productToEdit ? "Edit Product" : "Add New Product"}
+            {productToEdit ? "Edit Item" : "Add New Item"}
           </DialogTitle>
           <DialogDescription>
             {productToEdit
-              ? "Update the details of your product."
-              : "Fill in the details for the new product."}
+              ? "Update the details of your grocery item."
+              : "Fill in the details for the new grocery item."}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -129,9 +129,9 @@ export function ProductDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Name</FormLabel>
+                  <FormLabel>Grocery Item Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Wireless Keyboard" {...field} />
+                    <Input placeholder="e.g. Organic Apples" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,7 +145,7 @@ export function ProductDialog({
                   <FormLabel>Category</FormLabel>
                   <div className="flex items-center gap-2">
                     <FormControl>
-                      <Input placeholder="e.g. Electronics" {...field} />
+                      <Input placeholder="e.g. Produce" {...field} />
                     </FormControl>
                     <Button
                       type="button"
@@ -210,7 +210,7 @@ export function ProductDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit">Save Product</Button>
+              <Button type="submit">Save Item</Button>
             </DialogFooter>
           </form>
         </Form>
