@@ -8,6 +8,7 @@ import {
   Plus,
   Minus,
 } from "lucide-react";
+import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -109,6 +110,7 @@ export function ProductTable({
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[80px]">Image</TableHead>
             <TableHead className="w-[40%]">Grocery Item</TableHead>
             <TableHead>Category</TableHead>
             <TableHead className="text-right">Quantity</TableHead>
@@ -118,6 +120,16 @@ export function ProductTable({
         <TableBody>
           {products.map((product) => (
             <TableRow key={product.id}>
+               <TableCell>
+                <Image
+                  src={product.image || "https://placehold.co/100x100.png"}
+                  alt={product.name}
+                  width={64}
+                  height={64}
+                  className="rounded-md object-cover"
+                  data-ai-hint="product image"
+                />
+              </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
               <TableCell>{product.category}</TableCell>
               <TableCell

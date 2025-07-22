@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Sparkles, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -55,6 +56,7 @@ export function ProductDialog({
       category: "",
       quantity: 0,
       price: 0,
+      image: "",
     },
   });
 
@@ -68,6 +70,7 @@ export function ProductDialog({
         category: "",
         quantity: 0,
         price: 0,
+        image: `https://placehold.co/100x100.png`,
       });
     }
   }, [productToEdit, form, isOpen]);
@@ -105,9 +108,12 @@ export function ProductDialog({
     const product: Product = {
       id: productToEdit?.id || new Date().toISOString(),
       ...data,
+      image: data.image || `https://placehold.co/100x100.png`
     };
     onSave(product);
   };
+  
+  const imageUrl = form.watch("image");
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -124,6 +130,31 @@ export function ProductDialog({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {imageUrl && (
+                 <div className="flex justify-center">
+                    <Image
+                        src={imageUrl}
+                        alt="Product image"
+                        width={100}
+                        height={100}
+                        className="rounded-md object-cover"
+                        data-ai-hint="product image"
+                    />
+                </div>
+            )}
+             <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image URL</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. https://example.com/image.png" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
