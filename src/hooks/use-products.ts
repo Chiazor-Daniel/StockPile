@@ -6,15 +6,27 @@ import { DUMMY_PRODUCTS } from "@/lib/dummy-data";
 
 const STORAGE_KEY = "stockpile-products";
 
+// A simple way to check if the stored data is the old gadget data.
+const isOldData = (products: Product[]) => {
+  return products.some(p => p.name.toLowerCase().includes('laptop'));
+}
+
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     try {
-      const storedProducts = window.localStorage.getItem(STORAGE_KEY);
-      if (storedProducts) {
-        setProducts(JSON.parse(storedProducts));
+      const storedProductsJSON = window.localStorage.getItem(STORAGE_KEY);
+      if (storedProductsJSON) {
+        const storedProducts = JSON.parse(storedProductsJSON);
+        // If the stored data is the old gadget data, clear it.
+        if (isOldData(storedProducts)) {
+           window.localStorage.removeItem(STORAGE_KEY);
+           setProducts(DUMMY_PRODUCTS);
+        } else {
+          setProducts(storedProducts);
+        }
       } else {
         setProducts(DUMMY_PRODUCTS);
       }
