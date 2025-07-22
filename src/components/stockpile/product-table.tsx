@@ -97,9 +97,9 @@ export function ProductTable({
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-        <h3 className="text-xl font-medium text-gray-900">No Groceries Found</h3>
+        <h3 className="text-xl font-medium text-gray-900">No Products Found</h3>
         <p className="mt-2 text-sm text-gray-500">
-          Get started by adding a new grocery item.
+          Get started by adding a new product.
         </p>
       </div>
     );
@@ -110,8 +110,8 @@ export function ProductTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">Image</TableHead>
-            <TableHead className="w-[40%]">Grocery Item</TableHead>
+            <TableHead className="w-[100px]">Image</TableHead>
+            <TableHead className="w-[40%]">Product Name</TableHead>
             <TableHead>Category</TableHead>
             <TableHead className="text-right">Quantity</TableHead>
             <TableHead className="w-[100px] text-center">Actions</TableHead>
@@ -124,8 +124,8 @@ export function ProductTable({
                 <Image
                   src={product.image || "https://placehold.co/100x100.png"}
                   alt={product.name}
-                  width={64}
-                  height={64}
+                  width={80}
+                  height={80}
                   className="rounded-md object-cover"
                   data-ai-hint="product image"
                 />

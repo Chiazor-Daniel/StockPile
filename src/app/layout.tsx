@@ -13,11 +13,11 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingBasket } from 'lucide-react';
+import { LayoutDashboard, Package } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Grocery Tracker',
-  description: 'A simple application to track your groceries.',
+  title: 'Stockpile Manager',
+  description: 'A simple application to manage your inventory.',
 };
 
 export default function RootLayout({
@@ -45,8 +45,8 @@ export default function RootLayout({
             <SidebarContent>
               <SidebarHeader>
                 <div className="flex items-center gap-2">
-                  <ShoppingBasket className="h-6 w-6 text-primary" />
-                  <h2 className="text-lg font-semibold">Grocer</h2>
+                  <Package className="h-6 w-6 text-primary" />
+                  <h2 className="text-lg font-semibold">Stockpile</h2>
                 </div>
               </SidebarHeader>
               <SidebarMenu>
@@ -60,9 +60,9 @@ export default function RootLayout({
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <Link href="/products" passHref>
-                    <SidebarMenuButton tooltip="Groceries">
-                      <ShoppingBasket />
-                      <span>Groceries</span>
+                    <SidebarMenuButton tooltip="Products">
+                      <Package />
+                      <span>Products</span>
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
