@@ -113,6 +113,7 @@ export function ProductTable({
             <TableHead className="w-[100px]">Image</TableHead>
             <TableHead className="w-[40%]">Product Name</TableHead>
             <TableHead>Category</TableHead>
+            <TableHead className="text-right">Price</TableHead>
             <TableHead className="text-right">Quantity</TableHead>
             <TableHead className="w-[100px] text-center">Actions</TableHead>
           </TableRow>
@@ -132,6 +133,9 @@ export function ProductTable({
               </TableCell>
               <TableCell className="font-medium">{product.name}</TableCell>
               <TableCell>{product.category}</TableCell>
+              <TableCell className="text-right font-mono">
+                ${(product.price || 0).toFixed(2)}
+              </TableCell>
               <TableCell
                 className={cn(
                   "text-right font-mono transition-colors duration-1000",
