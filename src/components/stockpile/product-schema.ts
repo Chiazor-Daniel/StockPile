@@ -23,5 +23,5 @@ export const productSchema = z.object({
       message: "Price must be a non-negative number.",
     })
     .optional(),
-  image: z.string().url({ message: "Please enter a valid URL." }).optional(),
+  image: z.string().optional(),
 });

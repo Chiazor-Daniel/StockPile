@@ -4,7 +4,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, Upload } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,7 @@ export function ProductDialog({
 }: ProductDialogProps) {
   const [isSuggesting, setIsSuggesting] = React.useState(false);
   const { toast } = useToast();
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -104,6 +105,19 @@ export function ProductDialog({
     }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        form.setValue("image", reader.result as string, {
+          shouldValidate: true,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onSubmit = (data: ProductFormData) => {
     const product: Product = {
       id: productToEdit?.id || new Date().toISOString(),
@@ -142,15 +156,33 @@ export function ProductDialog({
                     />
                 </div>
             )}
-             <FormField
+            <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. https://example.com/image.png" {...field} />
-                  </FormControl>
+                  <FormLabel>Image</FormLabel>
+                  <div className="flex items-center gap-2">
+                    <FormControl>
+                      <Input placeholder="e.g. https://example.com/image.png" {...field} />
+                    </FormControl>
+                     <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => fileInputRef.current?.click()}
+                      aria-label="Upload Image"
+                    >
+                      <Upload className="h-4 w-4" />
+                    </Button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
