@@ -5,10 +5,10 @@ import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ProductDialog } from "@/components/stockpile/product-dialog";
-import { ProductTable } from "@/components/stockpile/product-table";
 import { useProducts } from "@/hooks/use-products";
 import type { Product } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ProductCard } from "@/components/stockpile/product-card";
 
 export default function ProductsPage() {
   const {
@@ -53,11 +53,22 @@ export default function ProductsPage() {
     setTimeout(() => setRecentlyUpdated(null), 1500);
   };
 
+  if (products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+        <h3 className="text-xl font-medium text-gray-900">No Products Found</h3>
+        <p className="mt-2 text-sm text-gray-500">
+          Get started by adding a new product.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <header className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight text-gray-800 dark:text-white">
-          Products
+          Popular Product
         </h1>
         <Button onClick={() => handleOpenDialog()}>
           <PlusCircle className="mr-2 h-4 w-4" />
@@ -66,20 +77,21 @@ export default function ProductsPage() {
       </header>
       <main>
         {isLoading ? (
-          <div className="w-full space-y-2">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton key={i} className="h-64 w-full" />
+            ))}
           </div>
         ) : (
-          <ProductTable
-            products={products}
-            onEdit={handleOpenDialog}
-            onDelete={deleteProduct}
-            onUpdateStock={handleUpdateStock}
-            recentlyUpdated={recentlyUpdated}
-          />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onEdit={handleOpenDialog}
+              />
+            ))}
+          </div>
         )}
       </main>
 
