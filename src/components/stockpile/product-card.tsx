@@ -31,7 +31,7 @@ export function ProductCard({ product, onEdit }: ProductCardProps) {
         <Badge variant="secondary" className="w-fit mb-2">{product.category}</Badge>
         <CardTitle className="text-lg font-semibold leading-snug tracking-tight flex-grow">{product.name}</CardTitle>
         <CardDescription className="mt-2 text-2xl font-bold text-primary">
-          £{(product.price || 0).toFixed(2)}
+          ₦{(product.price || 0).toFixed(2)}
         </CardDescription>
       </CardContent>
       <CardFooter className="p-4 mt-auto bg-card">

@@ -114,7 +114,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              £{totalValue.toLocaleString()}
+              ₦{totalValue.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
               Estimated value of all items
