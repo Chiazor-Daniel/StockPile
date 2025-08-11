@@ -15,15 +15,11 @@ export default function ProductsPage() {
     products,
     addProduct,
     editProduct,
-    updateStock,
     deleteProduct,
     isLoading,
   } = useProducts();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [productToEdit, setProductToEdit] = React.useState<Product | null>(
-    null
-  );
-  const [recentlyUpdated, setRecentlyUpdated] = React.useState<string | null>(
     null
   );
 
@@ -47,40 +43,39 @@ export default function ProductsPage() {
     setProductToEdit(null);
   };
 
-  const handleUpdateStock = (productId: string, change: number) => {
-    updateStock(productId, change);
-    setRecentlyUpdated(productId);
-    setTimeout(() => setRecentlyUpdated(null), 1500);
-  };
-
-  if (products.length === 0) {
+  if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-        <h3 className="text-xl font-medium text-gray-900">No Products Found</h3>
-        <p className="mt-2 text-sm text-gray-500">
-          Get started by adding a new product.
-        </p>
+      <div className="p-4 md:p-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-80 w-full" />
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 p-4 md:p-8">
       <header className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-800 dark:text-white">
-          Popular Product
-        </h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Product Inventory
+          </h1>
+          <p className="text-muted-foreground">Manage your grocery products.</p>
+        </div>
         <Button onClick={() => handleOpenDialog()}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Add Item
+          Add Product
         </Button>
       </header>
       <main>
-        {isLoading ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-64 w-full" />
-            ))}
+        {products.length === 0 ? (
+           <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center h-96">
+            <h3 className="text-xl font-medium">No Products Found</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Get started by adding a new product.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

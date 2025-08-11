@@ -70,10 +70,14 @@ export default function RootLayout({
             </SidebarContent>
           </Sidebar>
           <SidebarInset>
-            <header className="p-4 border-b md:hidden">
+            <header className="p-4 border-b md:hidden flex items-center gap-4">
               <SidebarTrigger />
+              <div className="flex items-center gap-2">
+                  <Package className="h-6 w-6 text-primary" />
+                  <h2 className="text-lg font-semibold">Stockpile</h2>
+                </div>
             </header>
-            <main className="p-4">{children}</main>
+            <main>{children}</main>
           </SidebarInset>
         </SidebarProvider>
         <Toaster />
